@@ -1,0 +1,46 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: leyou-gateway
+
+zuul:
+  prefix: /api
+  routes:
+    item-service: /item/**   #路由到商品的微服务
+    search-service: /search/**   #路由到商品聚合的微服务
+    user-service: /user/**   #路由到用户查找、注册的微服务
+    auth-service: /auth/**   #路由到用户登陆授权的微服务
+    cart-service: /cart/**   #路由到购物车的微服务
+    order-service: /order/** #路由到购订单的微服务
+
+    ##为了保存cookie
+  add-host-header: true   #携带头信息
+  sensitive-headers:      #覆盖敏感头信息
+
+eureka:
+  client:
+    registry-fetch-interval-seconds: 5  #拉取服务的时间
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+
+leyou:
+  jwt:
+    pubKeyPath: C:\\tmp\\rsa\\rsa.pub # 公钥地址
+    cookieName: LY_TOKEN
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item
+
